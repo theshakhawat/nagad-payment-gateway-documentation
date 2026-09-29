@@ -6,7 +6,8 @@
 [![Author](https://img.shields.io/badge/Developed%20By-Shakhawat%20Hossain-E83823?style=flat&logo=globe)](https://shakhawatdev.com)
 
 একটি সম্পূর্ণ, প্রফেশনাল এবং প্যাকেজ-মুক্ত (No Third-Party Package Required) গাইড—যা যেকোনো প্রোগ্রামিং ল্যাঙ্গুয়েজ (PHP/Laravel, Node.js, Python ইত্যাদি)-এ সরাসরি নগদের অফিশিয়াল REST API, RSA পাবলিক-প্রাইভেট কী এনক্রিপশন এবং SHA256 ডিজিটাল সিগনেচার দিয়ে পেমেন্ট গেটওয়ে ইন্টিগ্রেট করার নিয়ম ব্যাখ্যা করে।
-
+---
+## [Live link](https://shakhawatdevofficial.github.io/nagad-payment-gateway-documentation)
 ---
 
 ## 📑 সূচিপত্র (Table of Contents)

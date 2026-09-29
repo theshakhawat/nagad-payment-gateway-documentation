@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>API Reference | Nagad Payment Gateway Developer Documentation</title>
+    <meta name="description" content="Complete API Reference for Nagad Payment Gateway: Endpoints, Request Body, Headers, Responses and Error Codes. Authored by Shakhawat Hossain.">
+    <meta name="author" content="Shakhawat Hossain (shakhawatdev.com)">
+    
+    <!-- Google Fonts: Hind Siliguri, Inter, Plus Jakarta Sans, Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PrismJS Theme for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nagad: {
+                            50: '#fff5f2',
+                            100: '#ffe8e2',
+                            500: '#F7941D',
+                            600: '#E83823',
+                            700: '#D12814',
+                            800: '#A81E0E',
+                            900: '#751408',
+                        },
+                        dark: {
+                            bg: '#0B0F19',
+                            card: '#111827',
+                            border: '#1F2937',
+                            muted: '#9CA3AF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'Inter', 'system-ui', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+        .sidebar-active {
+            color: #E83823 !important;
+            font-weight: 600;
+            background-color: rgba(232, 56, 35, 0.08);
+            border-left: 3px solid #E83823;
+        }
+        .dark .sidebar-active {
+            background-color: rgba(232, 56, 35, 0.16);
+            color: #ff6b57 !important;
+        }
+        .code-container { 
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        pre[class*="language-"] {
+            margin: 0 !important;
+            border-radius: 0.5rem;
+            max-width: 100%;
+            overflow-x: auto !important;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+            background: rgba(31, 41, 55, 0.85);
+            color: #d1d5db;
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #374151; color: white; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-gray-800 dark:bg-[#0B0F19] dark:text-gray-200 transition-colors duration-200 antialiased font-sans flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- Top Navbar -->
+    <header class="sticky top-0 z-40 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none" aria-label="Toggle Mobile Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" alt="Nagad Official Logo" class="h-8 sm:h-9 w-auto object-contain">
+                    <div class="border-l border-gray-300 dark:border-gray-700 pl-2 sm:pl-2.5">
+                        <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight text-gray-900 dark:text-white">Developer Docs</span>
+                        <span class="hidden sm:inline-block text-[11px] ml-1 px-1.5 py-0.2 rounded-full font-medium bg-red-100 text-red-700 dark:bg-red-950/70 dark:text-red-300 border border-red-200 dark:border-red-900">API Reference</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Global Nav Links & Theme Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <a href="index.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Overview</a>
+                    <a href="api-reference.html" class="px-3 py-1.5 rounded-lg text-nagad-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 font-semibold">API Reference</a>
+                    <a href="implementation.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Code Examples</a>
+                    <a href="troubleshooting.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Troubleshooting</a>
+                </nav>
+
+                <div class="h-5 w-px bg-gray-200 dark:bg-gray-800 hidden md:block"></div>
+
+                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-start min-w-0">
+        
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+        <!-- Left Sidebar Navigation with ScrollSpy -->
+        <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 lg:w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out p-4 space-y-6">
+            
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">API Reference</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#headers" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-heading text-xs text-gray-400 w-4"></i> Standard Headers</a></li>
+                    <li><a href="#initialize-api" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition sidebar-active"><i class="fa-solid fa-play text-xs text-nagad-600 w-4"></i> 1. Initialize API</a></li>
+                    <li><a href="#complete-api" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-check-double text-xs text-gray-400 w-4"></i> 2. Complete API</a></li>
+                    <li><a href="#callback" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-rotate-left text-xs text-gray-400 w-4"></i> 3. Callback Handling</a></li>
+                    <li><a href="#verify-api" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-badge-check text-xs text-gray-400 w-4"></i> 4. Verify API</a></li>
+                    <li><a href="#error-codes" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-list-ol text-xs text-gray-400 w-4"></i> Error Code Dictionary</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Documentation Pages</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="index.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-book-open text-xs text-gray-400 w-4"></i> Overview & Architecture</a></li>
+                    <li><a href="implementation.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-code text-xs text-emerald-500 w-4"></i> Code Implementations</a></li>
+                    <li><a href="troubleshooting.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-triangle-exclamation text-xs text-amber-500 w-4"></i> Troubleshooting & FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-800/80">
+                <div class="bg-gray-50 dark:bg-gray-900/60 p-3 rounded-xl border border-gray-200 dark:border-gray-800 text-xs">
+                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-code text-nagad-600"></i> Authored by
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 font-medium">Shakhawat Hossain</p>
+                    <a href="https://shakhawatdev.com" target="_blank" class="inline-block mt-2 font-medium text-nagad-600 dark:text-red-400 hover:underline">
+                        Visit Portfolio →
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 py-6 sm:py-8 lg:px-10 space-y-12">
+            
+            <section class="space-y-3 border-b border-gray-200 dark:border-gray-800 pb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-800/60">
+                    <i class="fa-solid fa-network-wired text-blue-500"></i> RESTful API Specifications
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-gray-900 dark:text-white tracking-tight leading-snug break-words">
+                    Nagad Payment Gateway API Reference
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl font-medium">
+                    নগদ পেমেন্ট গেটওয়ের সকল এন্ডপয়েন্ট, রিকোয়েস্ট হেডার, এনক্রিপ্ট ও সাইন করার নিয়ম, রেসপন্স ফরম্যাট এবং স্ট্যাটাস কোডের পুঙ্খানুপুঙ্খ বিবরণ।
+                </p>
+            </section>
+
+            <!-- Standard Headers -->
+            <section id="headers" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-heading text-nagad-600 text-lg"></i>
+                    Required HTTP Request Headers
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-xs sm:text-sm">
+                    নগদ গেটওয়ের প্রতিটা API রিকোয়েস্টে নিচের হেডারগুলো অবশ্যই পাঠাতে হবে:
+                </p>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 max-w-full">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-xs sm:text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-900/80 font-semibold text-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Header Key</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Type</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Example Value</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-semibold text-gray-900 dark:text-white">Content-Type</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">string</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">application/json</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">রিকোয়েস্ট বডির ফরম্যাট।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-semibold text-gray-900 dark:text-white">X-KM-Api-Version</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">string</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs text-nagad-600 dark:text-red-400">v-0.2.0</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">নগদ API এর ভার্সন।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-semibold text-gray-900 dark:text-white">X-KM-Client-Type</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">string</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs text-nagad-600 dark:text-red-400">PC_WEB</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">ক্লায়েন্ট টাইপ (e.g. <code>PC_WEB</code>, <code>MOBILE_APP</code>)।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-semibold text-gray-900 dark:text-white">X-KM-IP-V4</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">string</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs text-nagad-600 dark:text-red-400">103.112.54.40</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">আপনার সার্ভারের পাবলিক IPv4 অ্যাড্রেস।</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 1. Initialize API -->
+            <section id="initialize-api" class="space-y-5 scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">1</span>
+                        Initialize Payment API
+                    </h2>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 break-all">
+                        POST /check-out/initialize/{merchantId}/{orderId}
+                    </span>
+                </div>
+
+                <p class="text-gray-700 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+                    এই API কল করে পেমেন্ট সেশন ইনিশিয়ালাইজ করা হয়। সফল হলে নগদ একটি এনক্রিপ্টেড রেসপন্স দেয় যাতে <code>paymentReferenceId</code> এবং একটি <code>challenge</code> থাকে।
+                </p>
+
+                <!-- Plain Sensitive Data Box -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step A: Plain Sensitive Data (যা এনক্রিপ্ট ও সাইন হবে)</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "merchantId": "YOUR_MERCHANT_ID",
+    "datetime": "20260929112358",
+    "orderId": "ORD20260929052355164",
+    "challenge": "8f4abbef61aa8b8a88ba"
+}</code></pre>
+                    </div>
+                    <p class="text-xs text-amber-700 dark:text-amber-400">
+                        <i class="fa-solid fa-triangle-exclamation mr-1"></i> <strong>সতর্কতা:</strong> ফিল্ডের নাম অবশ্যই ছোট হাতের <code>"datetime"</code> হতে হবে। <code>orderId</code> অবশ্যই আলফানিউমেরিক (alphanumeric, 5-20 char) হতে হবে।
+                    </p>
+                </div>
+
+                <!-- Final Request Body -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step B: Final JSON Request Body</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "accountNumber": "017XXXXXXXX",
+    "dateTime": "20260929112358",
+    "sensitiveData": "Q0X/gAhRr+MD5iC62OwYT0cUm9BVXH6Ff2PRFCrwlzPgJQaAJ5c7Ddeu2YFkeivOj4Fk/F/...",
+    "signature": "DqK1RKd+Wce/uoQKTKZa3zL3FResbulzzw8pL5seyHYZo32NpJkamRY1Vb8APfrd5yH6+..."
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Decrypted Response Data -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step C: Decrypted Response Data (কী পাওয়া যাবে)</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "paymentReferenceId": "MDkyOTExMjM1ODQ5MS42ODc0ODEyMzc1NjUzOTkuT1JEMjAyNjA5MjkwNTIzNTUxNjQuOGY0YWJiZWY2MWFhOGI4YTg4YmE=",
+    "challenge": "8f4abbef61aa8b8a88ba",
+    "acceptDateTime": "20260929112358"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Complete / Place Order API -->
+            <section id="complete-api" class="space-y-5 scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">2</span>
+                        Complete / Place Order API
+                    </h2>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 break-all">
+                        POST /check-out/complete/{paymentReferenceId}
+                    </span>
+                </div>
+
+                <p class="text-gray-700 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+                    Initialize API থেকে পাওয়া <code>paymentReferenceId</code> এবং <code>challenge</code> ব্যবহার করে এই API কল করা হয়। সফল হলে নগদ একটি <code>callBackUrl</code> রিটার্ন করে, যাতে কাস্টমারকে রিডাইরেক্ট করে পেমেন্ট পেজে পাঠানো যায়।
+                </p>
+
+                <!-- Complete Sensitive Data -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step A: Plain Sensitive Data</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "merchantId": "YOUR_MERCHANT_ID",
+    "orderId": "ORD20260929052355164",
+    "amount": "100.00",
+    "currencyCode": "050",
+    "challenge": "8f4abbef61aa8b8a88ba"
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Complete Payload -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step B: Final JSON Payload</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "sensitiveData": "E93/a82lHI3ogQj91kHDGUv3WBHIPuQuo9AOtoQygCojytj+iGGTkQMa+8QYNvK3bS+vkKq13...",
+    "signature": "VPO4heyWfTOTD2tHGyRwuEtozsSyCvsVI7RfIbDqO4j0sf6a5Ja8QAXdj1FxTMKgJi9H4ZhH...",
+    "merchantCallbackURL": "https://yourdomain.com/api/nagad/callback",
+    "additionalMerchantInfo": {
+        "customerName": "Shakhawat Hossain",
+        "productName": "Software License",
+        "invoiceId": "INV-1002"
+    }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Complete Response -->
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Step C: Response Format</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "callBackUrl": "https://api.mynagad.com/api/dfs/check-out/redirect-gateway?id=MDkyOTExMjM1OD..."
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Callback Handling -->
+            <section id="callback" class="space-y-4 scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">3</span>
+                        Callback Handling & Security Rules
+                    </h2>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300">
+                        GET {merchantCallbackURL}
+                    </span>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-http">GET /api/nagad/callback?merchant=YOUR_MERCHANT_ID&order_id=ORD20260929052355164&payment_ref_id=MDkyOTExMjM1OD...&status=Success&status_code=00_000_00 HTTP/1.1</code></pre>
+                </div>
+
+                <div class="p-4 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/60 text-red-900 dark:text-red-200 text-xs sm:text-sm space-y-1.5">
+                    <strong class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-shield-halved"></i> গুরুত্বপূর্ণ সিকিউরিটি রুল:</strong>
+                    <p class="leading-relaxed">
+                        কলব্যাক পাওয়া মানেই পেমেন্ট কনফার্ম নয়! কলব্যাকের ডাটা ম্যানিপুলেট করা সম্ভব। তাই কলব্যাকে পাওয়া <code>payment_ref_id</code> দিয়ে <strong>অবশ্যই Verify Payment API</strong> কল করে সার্ভার-টু-সার্ভার যাচাই করার পর অর্ডার <code>PAID</code> করতে হবে।
+                    </p>
+                </div>
+            </section>
+
+            <!-- 4. Verify API -->
+            <section id="verify-api" class="space-y-5 scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-800 pb-3">
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                        <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">4</span>
+                        Verify Payment API
+                    </h2>
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-mono font-bold bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-300">
+                        GET /verify/payment/{paymentReferenceId}
+                    </span>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Verify Response Example</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-json">{
+    "merchantId": "YOUR_MERCHANT_ID",
+    "orderId": "ORD20260929052355164",
+    "paymentRefId": "MDkyOTExMjM1ODQ5MS42ODc0ODEyMzc1NjUzOTkuT1JEMjAyNjA5MjkwNTIzNTUxNjQuOGY0YWJiZWY2MWFhOGI4YTg4YmE=",
+    "amount": "100.00",
+    "clientMobileNo": "017XXXXXXXX",
+    "merchantMobileNo": "017XXXXXXXX",
+    "orderDateTime": "20260929112358",
+    "issuerPaymentDateTime": "20260929112502",
+    "issuerPaymentRefNo": "0000000012345",
+    "additionalMerchantInfo": "{\"customerName\":\"Shakhawat Hossain\"}",
+    "status": "Success",
+    "statusCode": "00_000_00",
+    "cancelIssuerDateTime": null,
+    "cancelIssuerRefNo": null
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Error Codes -->
+            <section id="error-codes" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-list-ol text-nagad-600 text-lg"></i>
+                    Nagad Error Code Dictionary
+                </h2>
+                
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 max-w-full">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-xs sm:text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-900/80 font-semibold text-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Error Code</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Meaning</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Cause & How to Fix</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-bold text-red-600 dark:text-red-400">16_0006_058</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-semibold text-gray-900 dark:text-white">Failed to verify signature</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">সিগনেচার মেথডে <code>OPENSSL_ALGO_SHA256</code> ব্যবহার না করলে অথবা পোর্টালে ভুল পাবলিক কী থাকলে এই এরর আসে।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-bold text-red-600 dark:text-red-400">16_0006_059</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-semibold text-gray-900 dark:text-white">Invalid Sensitive Data</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">পেলোডে ফিল্ডের নামে ভুল (যেমন <code>datetime</code> এর জায়গায় <code>dateTime</code> দিলে)।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-bold text-red-600 dark:text-red-400">16_0006_083</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-semibold text-gray-900 dark:text-white">Duplicate Order ID</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">একই দিনে একই Order ID দিয়ে দ্বিতীয়বার রিকোয়েস্ট পাঠালে। প্রতিবার ইউনিক Order ID দিতে হবে।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-bold text-red-600 dark:text-red-400">16_0006_068</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-semibold text-gray-900 dark:text-white">Invalid Order Id</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">Order ID তে স্পেশাল ক্যারেক্টার (যেমন আন্ডারস্কোর <code>_</code> বা স্পেস) থাকলে। শুধুমাত্র A-Z, 0-9 হতে হবে।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-bold text-red-600 dark:text-red-400">16_0006_064</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-semibold text-gray-900 dark:text-white">Mandatory Header Missing</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3"><code>X-KM-Api-Version</code> বা <code>X-KM-IP-V4</code> হেডার অনুপস্থিত থাকলে।</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Bottom Nav Bar -->
+            <div class="pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs sm:text-sm font-medium transition">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="implementation.html" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-nagad-600 hover:bg-nagad-700 text-white font-medium text-xs sm:text-sm transition shadow-sm">
+                    <span>Next: Code Examples</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer with Developer Credit -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-900 dark:text-white">Nagad PG Documentation</span>
+                <span>•</span>
+                <span>Developed by <a href="https://shakhawatdev.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-nagad-600 dark:text-red-400 hover:underline">Shakhawat Hossain</a></span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <a href="https://shakhawatdev.com" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-solid fa-globe mr-1"></i> shakhawatdev.com</a>
+                <a href="https://github.com/theshakhawat" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-http.min.js"></script>
+    <script>
+        function copyCode(button) {
+            const pre = button.nextElementSibling;
+            const code = pre.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1"></i>Copied!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fa-regular fa-copy mr-1"></i>Copy';
+                }, 2000);
+            });
+        }
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        function initTheme() {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        initTheme();
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        });
+
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        });
+
+        // ScrollSpy Active Tab
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveSidebar() {
+            let current = '';
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                const sectionHeight = section.offsetHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('sidebar-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('sidebar-active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSidebar);
+        window.addEventListener('load', updateActiveSidebar);
+    </script>
+</body>
+</html>

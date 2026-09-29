@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Troubleshooting & FAQs | Nagad Payment Gateway Developer Documentation</title>
+    <meta name="description" content="Real-world troubleshooting guide, security checklist, and FAQs for Nagad Payment Gateway integration. Authored by Shakhawat Hossain.">
+    <meta name="author" content="Shakhawat Hossain (shakhawatdev.com)">
+    
+    <!-- Google Fonts: Hind Siliguri, Inter, Plus Jakarta Sans, Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PrismJS Theme for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nagad: {
+                            50: '#fff5f2',
+                            100: '#ffe8e2',
+                            500: '#F7941D',
+                            600: '#E83823',
+                            700: '#D12814',
+                            800: '#A81E0E',
+                            900: '#751408',
+                        },
+                        dark: {
+                            bg: '#0B0F19',
+                            card: '#111827',
+                            border: '#1F2937',
+                            muted: '#9CA3AF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'Inter', 'system-ui', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+        .sidebar-active {
+            color: #E83823 !important;
+            font-weight: 600;
+            background-color: rgba(232, 56, 35, 0.08);
+            border-left: 3px solid #E83823;
+        }
+        .dark .sidebar-active {
+            background-color: rgba(232, 56, 35, 0.16);
+            color: #ff6b57 !important;
+        }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-gray-800 dark:bg-[#0B0F19] dark:text-gray-200 transition-colors duration-200 antialiased font-sans flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- Top Navbar -->
+    <header class="sticky top-0 z-40 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none" aria-label="Toggle Mobile Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" alt="Nagad Official Logo" class="h-8 sm:h-9 w-auto object-contain">
+                    <div class="border-l border-gray-300 dark:border-gray-700 pl-2 sm:pl-2.5">
+                        <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight text-gray-900 dark:text-white">Developer Docs</span>
+                        <span class="text-[11px] ml-1.5 px-2 py-0.5 rounded-full font-medium bg-red-100 text-red-700 dark:bg-red-950/70 dark:text-red-300 border border-red-200 dark:border-red-900">Troubleshooting</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Global Nav Links & Theme Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <a href="index.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Overview</a>
+                    <a href="api-reference.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">API Reference</a>
+                    <a href="implementation.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Code Examples</a>
+                    <a href="troubleshooting.html" class="px-3 py-1.5 rounded-lg text-nagad-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 font-semibold">Troubleshooting</a>
+                </nav>
+
+                <div class="h-5 w-px bg-gray-200 dark:bg-gray-800 hidden md:block"></div>
+
+                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-start min-w-0">
+        
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+        <!-- Left Sidebar Navigation with ScrollSpy -->
+        <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 lg:w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out p-4 space-y-6">
+            
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Troubleshooting</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#common-errors" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition sidebar-active"><i class="fa-solid fa-bug text-xs text-nagad-600 w-4"></i> Real Errors & Fixes</a></li>
+                    <li><a href="#local-vs-prod" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-laptop-code text-xs text-gray-400 w-4"></i> Local vs. Production</a></li>
+                    <li><a href="#security-checklist" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-shield-halved text-xs text-gray-400 w-4"></i> Security Checklist</a></li>
+                    <li><a href="#database-design" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-database text-xs text-gray-400 w-4"></i> Database Table Schema</a></li>
+                    <li><a href="#faq" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-circle-question text-xs text-gray-400 w-4"></i> FAQ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Other Pages</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="index.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-book-open text-xs text-gray-400 w-4"></i> Overview & Architecture</a></li>
+                    <li><a href="api-reference.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-network-wired text-xs text-blue-500 w-4"></i> API Reference</a></li>
+                    <li><a href="implementation.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-code text-xs text-emerald-500 w-4"></i> Code Implementations</a></li>
+                </ul>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-800/80">
+                <div class="bg-gray-50 dark:bg-gray-900/60 p-3 rounded-xl border border-gray-200 dark:border-gray-800 text-xs">
+                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-code text-nagad-600"></i> Authored by
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 font-medium">Shakhawat Hossain</p>
+                    <a href="https://shakhawatdev.com" target="_blank" class="inline-block mt-2 font-medium text-nagad-600 dark:text-red-400 hover:underline">
+                        Visit Portfolio →
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 py-6 sm:py-8 lg:px-10 space-y-12">
+            
+            <section class="space-y-3 border-b border-gray-200 dark:border-gray-800 pb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800/60">
+                    <i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Production Debugging & Best Practices
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-gray-900 dark:text-white tracking-tight leading-snug break-words">
+                    Troubleshooting & Security Handbook
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl font-medium">
+                    বাস্তব প্রজেক্টে নগদ গেটওয়ে ইন্টিগ্রেশন করতে গিয়ে যে যে সাধারণ সমস্যাগুলো হয়, সেগুলোর দ্রুত সমাধান এবং প্রোডাকশন লেভেলের সিকিউরিটি স্ট্যান্ডার্ড।
+                </p>
+            </section>
+
+            <!-- 1. Real World Errors -->
+            <section id="common-errors" class="space-y-6 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-bug text-nagad-600 text-xl"></i>
+                    Common Real-World Errors & How to Fix
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Item 1 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">1. Failed to verify signature (`16_0006_058`)</span>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300 font-bold">16_0006_058</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>কারণ:</strong> সিগনেচার অ্যালগরিদম হিসেবে <code>OPENSSL_ALGO_SHA1</code> ব্যবহার করা হয়েছে অথবা নগদ পোর্টালে আপলোড করা পাবলিক কী এর সাথে আপনার প্রাইভেট কী মেলেনি।
+                        </p>
+                        <div class="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300">
+                            <strong>সমাধান:</strong> <code>openssl_sign</code> ও <code>openssl_verify</code> উভয়ে <code>OPENSSL_ALGO_SHA256</code> ব্যবহার করুন এবং পোর্টালে আপনার সঠিক পাবলিক কী আপলোড নিশ্চিত করুন।
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">2. Duplicate Order ID in same day (`16_0006_083`)</span>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300 font-bold">16_0006_083</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>কারণ:</strong> টেস্ট করার সময় একই হার্ডকোডেড Order ID (যেমন <code>123456</code>) বারবার ব্যবহার করা হয়েছে। নগদে একই দিনে একই Order ID দ্বিতীয়বার পাঠানো যায় না।
+                        </p>
+                        <div class="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300">
+                            <strong>সমাধান:</strong> প্রতিবার ডায়নামিক ও ইউনিক Order ID জেনারেট করুন (e.g. <code>'ORD' . date('YmdHis') . rand(100, 999)</code>)।
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">3. Invalid Sensitive Data (`16_0006_059`)</span>
+                            <span class="text-xs px-2.5 py-0.5 rounded-full font-mono bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300 font-bold">16_0006_059</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>কারণ:</strong> <code>sensitiveData</code> অবজেক্টের কী (Key) নেমে ভুল ছিল (যেমন <code>dateTime</code> দেওয়া হয়েছিল ছোট হাতের <code>datetime</code> না দিয়ে)।
+                        </p>
+                        <div class="p-3 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-xs text-emerald-800 dark:text-emerald-300">
+                            <strong>সমাধান:</strong> <code>sensitiveData</code>-তে অবশ্যই <code>'datetime' => $dateTime</code> (ছোট হাতের t) ব্যবহার করুন।
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Local vs Production Testing -->
+            <section id="local-vs-prod" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-laptop-code text-blue-500 text-xl"></i>
+                    Local Development vs. Live Production
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 sm:p-5 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-2">
+                        <h3 class="font-bold text-gray-900 dark:text-white text-sm"><i class="fa-solid fa-house-laptop text-nagad-600 mr-1.5"></i> Local Development (127.0.0.1)</h3>
+                        <ul class="text-xs text-gray-600 dark:text-gray-400 space-y-1.5 list-disc list-inside leading-relaxed">
+                            <li>Initialize ও Complete API কল সফলভাবে লোকালহোস্ট থেকেই টেস্ট করা যায়।</li>
+                            <li>কিন্তু কাস্টমার পেমেন্ট সম্পন্ন করার পর নগদ আপনার লোকালহোস্ট দেখতে পাবে না।</li>
+                            <li><strong>সমাধান:</strong> লোকাল টেস্টের জন্য <strong>Ngrok</strong> বা <strong>Cloudflare Tunnel</strong> ব্যবহার করে পাবলিক URL বানিয়ে <code>NAGAD_CALLBACK_URL</code>-এ দিন।</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-2">
+                        <h3 class="font-bold text-gray-900 dark:text-white text-sm"><i class="fa-solid fa-server text-emerald-500 mr-1.5"></i> Live Production</h3>
+                        <ul class="text-xs text-gray-600 dark:text-gray-400 space-y-1.5 list-disc list-inside leading-relaxed">
+                            <li>অবশ্যই ভ্যালিড SSL সহ HTTPS ডোমেন ব্যবহার করতে হবে (e.g. <code>https://yourdomain.com/api/nagad/callback</code>)।</li>
+                            <li>আপনার লাইভ সার্ভারের স্ট্যাটিক পাবলিক IP নগদ মার্চেন্ট পোর্টালে হোয়াইটলিস্ট করে নিতে হবে এবং <code>X-KM-IP-V4</code> হেডারে পাঠাতে হবে।</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Security Checklist -->
+            <section id="security-checklist" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-shield-halved text-emerald-500 text-xl"></i>
+                    Production Security Checklist
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-base mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-gray-900 dark:text-white block font-semibold mb-0.5">Never Commit Private Keys</strong>
+                            <p class="text-gray-500"><code>.pem</code> ফাইল এবং <code>.env</code> কখনো গিটহাবে পুশ করবেন না। <code>.gitignore</code>-এ অ্যাড রাখুন।</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-base mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-gray-900 dark:text-white block font-semibold mb-0.5">Never Trust Callback Blindly</strong>
+                            <p class="text-gray-500">কলব্যাক পাওয়ার পর সবসময় <code>Verify Payment API</code> কল করে স্ট্যাটাস চেক করুন।</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-base mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-gray-900 dark:text-white block font-semibold mb-0.5">Match Amount & Order ID</strong>
+                            <p class="text-gray-500">Verify রেসপন্সের Amount এবং Order ID আপনার ডাটাবেজের সাথে হুবহু মিলতে হবে।</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3.5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 flex items-start gap-2.5">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-base mt-0.5 flex-shrink-0"></i>
+                        <div>
+                            <strong class="text-gray-900 dark:text-white block font-semibold mb-0.5">Handle Idempotency</strong>
+                            <p class="text-gray-500">একই অর্ডারের জন্য বারবার কলব্যাক এলেও যাতে ডাবল প্রসেস বা প্রোডাক্ট ২ বার একটিভ না হয়।</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Database Design -->
+            <section id="database-design" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-database text-purple-500 text-xl"></i>
+                    Recommended Database Schema
+                </h2>
+                
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 max-w-full">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-xs sm:text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-900/80 font-semibold text-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Column Name</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Type</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">order_id</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono">VARCHAR(50) UNIQUE</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">আপনার সিস্টেমের ইউনিক অর্ডার নম্বর।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">payment_ref_id</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono">TEXT NULLABLE</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">নগদ কর্তৃক প্রদত্ত paymentReferenceId।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">amount</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono">DECIMAL(10,2)</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">পেমেন্টের টাকার পরিমাণ।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">status</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono">ENUM('pending', 'paid', 'failed')</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">বর্তমান পেমেন্ট স্ট্যাটাস।</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">issuer_ref_no</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono">VARCHAR(100) NULLABLE</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">নগদ ট্রানজ্যাকশন আইডি (TrxID)।</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 5. FAQ -->
+            <section id="faq" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-solid fa-circle-question text-amber-500 text-xl"></i>
+                    Frequently Asked Questions (FAQ)
+                </h2>
+
+                <div class="space-y-3 text-sm">
+                    <details class="group p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition">
+                        <summary class="font-bold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
+                            <span>নগদ পেমেন্ট গেটওয়ের জন্য কি কোনো অফিসিয়াল SDK আছে?</span>
+                            <i class="fa-solid fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            নগদ সরাসরি কোনো অফিসিয়াল ফ্রেমওয়ার্ক SDK মেইনটেইন করে না। তারা শুধুমাত্র REST API ডকুমেন্টেশন এবং কী-পেয়ার প্রদান করে। তাই নিজস্ব সার্ভিসে নেটিভ HTTP Client ও OpenSSL দিয়ে ইন্টিগ্রেট করাই সবচেয়ে দ্রুত ও নির্ভরযোগ্য উপায়।
+                        </p>
+                    </details>
+
+                    <details class="group p-4 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 transition">
+                        <summary class="font-bold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
+                            <span>আমার সার্ভারের টাইমজোন কি এশিয়া/ঢাকা (Asia/Dhaka) হতে হবে?</span>
+                            <i class="fa-solid fa-chevron-down text-xs group-open:rotate-180 transition-transform"></i>
+                        </summary>
+                        <p class="mt-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            হ্যাঁ। নগদের API রিকোয়েস্টের <code>dateTime</code> ফরম্যাট <code>YmdHis</code> (e.g. <code>20260929112358</code>) আশা করে বাংলাদেশ স্থানীয় সময়ে। তাই টাইমস্ট্যাম্প জেনারেট করার সময় <code>now('Asia/Dhaka')</code> নিশ্চিত করুন।
+                        </p>
+                    </details>
+                </div>
+            </section>
+
+            <!-- Bottom Nav Bar -->
+            <div class="pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <a href="implementation.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs sm:text-sm font-medium transition">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span>Code Implementations</span>
+                </a>
+                <a href="index.html" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium text-xs sm:text-sm transition shadow-sm">
+                    <span>Back to Overview</span>
+                    <i class="fa-solid fa-house text-xs"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer with Developer Credit -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-900 dark:text-white">Nagad PG Documentation</span>
+                <span>•</span>
+                <span>Developed by <a href="https://shakhawatdev.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-nagad-600 dark:text-red-400 hover:underline">Shakhawat Hossain</a></span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <a href="https://shakhawatdev.com" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-solid fa-globe mr-1"></i> shakhawatdev.com</a>
+                <a href="https://github.com/theshakhawat" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        function initTheme() {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        initTheme();
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        });
+
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        });
+
+        // ScrollSpy Active Tab
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveSidebar() {
+            let current = '';
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                const sectionHeight = section.offsetHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('sidebar-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('sidebar-active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSidebar);
+        window.addEventListener('load', updateActiveSidebar);
+    </script>
+</body>
+</html>

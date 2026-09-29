@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Code Implementations | Nagad Payment Gateway Developer Documentation</title>
+    <meta name="description" content="Production-ready native code implementations for Nagad Payment Gateway in PHP/Laravel, Node.js, and Python. Authored by Shakhawat Hossain.">
+    <meta name="author" content="Shakhawat Hossain (shakhawatdev.com)">
+    
+    <!-- Google Fonts: Hind Siliguri, Inter, Plus Jakarta Sans, Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PrismJS Theme for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nagad: {
+                            50: '#fff5f2',
+                            100: '#ffe8e2',
+                            500: '#F7941D',
+                            600: '#E83823',
+                            700: '#D12814',
+                            800: '#A81E0E',
+                            900: '#751408',
+                        },
+                        dark: {
+                            bg: '#0B0F19',
+                            card: '#111827',
+                            border: '#1F2937',
+                            muted: '#9CA3AF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'Inter', 'system-ui', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+        .sidebar-active {
+            color: #E83823 !important;
+            font-weight: 600;
+            background-color: rgba(232, 56, 35, 0.08);
+            border-left: 3px solid #E83823;
+        }
+        .dark .sidebar-active {
+            background-color: rgba(232, 56, 35, 0.16);
+            color: #ff6b57 !important;
+        }
+        .code-container { 
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+        pre[class*="language-"] {
+            margin: 0 !important;
+            border-radius: 0.5rem;
+            max-width: 100%;
+            overflow-x: auto !important;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+            background: rgba(31, 41, 55, 0.85);
+            color: #d1d5db;
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #374151; color: white; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-gray-800 dark:bg-[#0B0F19] dark:text-gray-200 transition-colors duration-200 antialiased font-sans flex flex-col min-h-screen overflow-x-hidden">
+
+    <!-- Top Navbar -->
+    <header class="sticky top-0 z-40 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none" aria-label="Toggle Mobile Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" alt="Nagad Official Logo" class="h-8 sm:h-9 w-auto object-contain">
+                    <div class="border-l border-gray-300 dark:border-gray-700 pl-2 sm:pl-2.5">
+                        <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight text-gray-900 dark:text-white">Developer Docs</span>
+                        <span class="hidden sm:inline-block text-[11px] ml-1 px-1.5 py-0.2 rounded-full font-medium bg-red-100 text-red-700 dark:bg-red-950/70 dark:text-red-300 border border-red-200 dark:border-red-900">Code Examples</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Global Nav Links & Theme Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <a href="index.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Overview</a>
+                    <a href="api-reference.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">API Reference</a>
+                    <a href="implementation.html" class="px-3 py-1.5 rounded-lg text-nagad-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 font-semibold">Code Examples</a>
+                    <a href="troubleshooting.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Troubleshooting</a>
+                </nav>
+
+                <div class="h-5 w-px bg-gray-200 dark:bg-gray-800 hidden md:block"></div>
+
+                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-start min-w-0">
+        
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+        <!-- Left Sidebar Navigation with ScrollSpy -->
+        <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-40 h-[calc(100vh-4rem)] w-72 lg:w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out p-4 space-y-6">
+            
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">PHP / Laravel</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#laravel-structure" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-folder-tree text-xs text-gray-400 w-4"></i> Directory Structure</a></li>
+                    <li><a href="#laravel-env" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-gear text-xs text-gray-400 w-4"></i> .env & config/nagad.php</a></li>
+                    <li><a href="#laravel-service" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition sidebar-active"><i class="fa-brands fa-php text-xs text-nagad-600 w-4"></i> NagadService.php</a></li>
+                    <li><a href="#laravel-routes" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-route text-xs text-gray-400 w-4"></i> routes/web.php</a></li>
+                    <li><a href="#laravel-controller" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-sliders text-xs text-gray-400 w-4"></i> Controller Implementation</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Other Languages</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#nodejs-impl" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-brands fa-node-js text-xs text-emerald-500 w-4"></i> Node.js (Express)</a></li>
+                    <li><a href="#python-impl" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-brands fa-python text-xs text-blue-500 w-4"></i> Python (FastAPI/Flask)</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Documentation Pages</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="index.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-book-open text-xs text-gray-400 w-4"></i> Overview & Architecture</a></li>
+                    <li><a href="api-reference.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-network-wired text-xs text-blue-500 w-4"></i> API Reference</a></li>
+                    <li><a href="troubleshooting.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-triangle-exclamation text-xs text-amber-500 w-4"></i> Troubleshooting & FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-800/80">
+                <div class="bg-gray-50 dark:bg-gray-900/60 p-3 rounded-xl border border-gray-200 dark:border-gray-800 text-xs">
+                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-code text-nagad-600"></i> Authored by
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 font-medium">Shakhawat Hossain</p>
+                    <a href="https://shakhawatdev.com" target="_blank" class="inline-block mt-2 font-medium text-nagad-600 dark:text-red-400 hover:underline">
+                        Visit Portfolio →
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 py-6 sm:py-8 lg:px-10 space-y-12">
+            
+            <section class="space-y-3 border-b border-gray-200 dark:border-gray-800 pb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/60">
+                    <i class="fa-solid fa-code text-emerald-500"></i> Production Ready Code
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-gray-900 dark:text-white tracking-tight leading-snug break-words">
+                    Native Code Implementations
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl font-medium">
+                    কোনো এক্সটার্নাল প্যাকেজ ছাড়া পিএইচপি/লারাভেল, নোড জেএস এবং পাইথনে নগদের লাইভ গেটওয়ে ইন্টিগ্রেশনের সম্পূর্ণ কোডবেস।
+                </p>
+            </section>
+
+            <!-- 1. Laravel Structure -->
+            <section id="laravel-structure" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <i class="fa-brands fa-laravel text-red-500 text-xl"></i>
+                    1. Laravel File Structure
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 text-xs sm:text-sm leading-relaxed">
+                    লারাভেলে কোড ক্লিন ও মেইনটেইনেবল রাখতে আমরা একটি ডেডিকেটেড সার্ভিস প্যাটার্ন (<code>NagadService</code>) ব্যবহার করব:
+                </p>
+                
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-text">app/
+├── Http/
+│   └── Controllers/
+│       └── AdminController.php   # Or PaymentController.php
+└── Services/
+    └── NagadService.php          # &lt;-- Core Nagad Service Class
+
+config/
+└── nagad.php
+
+routes/
+└── web.php
+
+storage/
+└── keys/
+    └── nagad/
+        ├── nagad_private_key.pem # &lt;-- Your Merchant Private Key
+        └── nagad_public_key.pem  # &lt;-- Nagad Gateway Public Key</code></pre>
+                </div>
+            </section>
+
+            <!-- 2. Laravel .env and Config -->
+            <section id="laravel-env" class="space-y-4 scroll-mt-20">
+                <h2 class="text-lg sm:text-xl font-bold font-heading text-gray-900 dark:text-white">
+                    2. Environment & Config Setup
+                </h2>
+                
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">.env File (Example Setup)</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-bash">NAGAD_BASE_URL="https://api.mynagad.com/api/dfs"
+NAGAD_MERCHANT_ID="YOUR_MERCHANT_ID"
+NAGAD_ACCOUNT_NUMBER="017XXXXXXXX"
+NAGAD_CALLBACK_URL="${APP_URL}/api/nagad/callback"
+NAGAD_PUBLIC_KEY="keys/nagad/nagad_public_key.pem"
+NAGAD_PRIVATE_KEY="keys/nagad/nagad_private_key.pem"
+NAGAD_API_VERSION="v-0.2.0"
+NAGAD_CLIENT_TYPE="PC_WEB"
+NAGAD_SERVER_IP="YOUR_SERVER_PUBLIC_IP"</code></pre>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">config/nagad.php</h3>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                        <pre><code class="language-php">&lt;?php
+
+return [
+    'base_url'       => env('NAGAD_BASE_URL'),
+    'merchant_id'    => env('NAGAD_MERCHANT_ID'),
+    'account_number' => env('NAGAD_ACCOUNT_NUMBER'),
+    'callback_url'   => env('NAGAD_CALLBACK_URL'),
+    'public_key'     => env('NAGAD_PUBLIC_KEY'),
+    'private_key'    => env('NAGAD_PRIVATE_KEY'),
+    'api_version'    => env('NAGAD_API_VERSION', 'v-0.2.0'),
+    'client_type'    => env('NAGAD_CLIENT_TYPE', 'PC_WEB'),
+    'server_ip'      => env('NAGAD_SERVER_IP'),
+];</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. NagadService.php Full Code -->
+            <section id="laravel-service" class="space-y-4 scroll-mt-20">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg sm:text-xl font-bold font-heading text-gray-900 dark:text-white">
+                        3. Complete NagadService.php (PSR-12 Standard)
+                    </h2>
+                    <span class="text-xs px-2.5 py-1 rounded-md font-mono bg-red-50 text-nagad-600 dark:bg-red-950 dark:text-red-300 font-bold">Tested & Verified</span>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-php">&lt;?php
+
+namespace App\Services;
+
+use Illuminate\Support\Facades\Http;
+use RuntimeException;
+
+class NagadService
+{
+    protected string $publicKey;
+    protected string $privateKey;
+
+    /**
+     * Create a new NagadService instance.
+     *
+     * @throws RuntimeException
+     */
+    public function __construct()
+    {
+        $publicKeyPath = storage_path(config('nagad.public_key'));
+        $privateKeyPath = storage_path(config('nagad.private_key'));
+
+        if (! file_exists($publicKeyPath)) {
+            throw new RuntimeException("Nagad public key not found: {$publicKeyPath}");
+        }
+
+        if (! file_exists($privateKeyPath)) {
+            throw new RuntimeException("Nagad private key not found: {$privateKeyPath}");
+        }
+
+        $this->publicKey = file_get_contents($publicKeyPath);
+        $this->privateKey = file_get_contents($privateKeyPath);
+    }
+
+    /**
+     * 1. Initialize payment request.
+     */
+    public function initialize(string $orderId): object
+    {
+        $merchantId = config('nagad.merchant_id');
+        $url = rtrim(config('nagad.base_url')) . "/check-out/initialize/{$merchantId}/{$orderId}";
+        $dateTime = now('Asia/Dhaka')->format('YmdHis');
+
+        $sensitiveData = [
+            'merchantId' => $merchantId,
+            'datetime'   => $dateTime,
+            'orderId'    => $orderId,
+            'challenge'  => $this->generateChallenge(),
+        ];
+
+        $encryptedData = $this->encrypt($sensitiveData);
+        $signature = $this->sign($sensitiveData);
+
+        $payload = [
+            'accountNumber' => config('nagad.account_number'),
+            'dateTime'      => $dateTime,
+            'sensitiveData' => $encryptedData,
+            'signature'     => $signature,
+        ];
+
+        $response = Http::withHeaders($this->getHeaders())
+            ->acceptJson()
+            ->asJson()
+            ->post($url, $payload);
+
+        if ($response->failed()) {
+            throw new RuntimeException("Nagad initialize request failed: {$response->body()}");
+        }
+
+        $responseData = $response->json();
+
+        if (! is_array($responseData) || empty($responseData['sensitiveData']) || empty($responseData['signature'])) {
+            throw new RuntimeException('Invalid or missing sensitiveData in Nagad initialize response.');
+        }
+
+        $plainData = $this->decryptRaw($responseData['sensitiveData']);
+        $isValid = $this->verifySignature($plainData, $responseData['signature']);
+
+        if (! $isValid) {
+            throw new RuntimeException('Nagad initialize response signature verification failed.');
+        }
+
+        $decryptedData = json_decode($plainData, true);
+
+        return (object) [
+            'raw'  => $responseData,
+            'data' => $decryptedData,
+        ];
+    }
+
+    /**
+     * 2. Complete checkout and generate redirect gateway URL.
+     */
+    public function complete(string $orderId, string $amount, array $initializeData): object
+    {
+        $paymentReferenceId = $initializeData['paymentReferenceId']
+            ?? throw new RuntimeException('Payment reference ID not found.');
+
+        $challenge = $initializeData['challenge']
+            ?? $initializeData['random']
+            ?? throw new RuntimeException('Challenge not found in Initialize response.');
+
+        $sensitiveData = [
+            'merchantId'   => config('nagad.merchant_id'),
+            'orderId'      => $orderId,
+            'amount'       => number_format((float) $amount, 2, '.', ''),
+            'currencyCode' => '050',
+            'challenge'    => $challenge,
+        ];
+
+        $encryptedData = $this->encrypt($sensitiveData);
+        $signature = $this->sign($sensitiveData);
+
+        $url = rtrim(config('nagad.base_url')) . "/check-out/complete/{$paymentReferenceId}";
+
+        $payload = [
+            'sensitiveData'       => $encryptedData,
+            'signature'           => $signature,
+            'merchantCallbackURL' => config('nagad.callback_url'),
+        ];
+
+        $response = Http::withHeaders($this->getHeaders())
+            ->acceptJson()
+            ->asJson()
+            ->post($url, $payload);
+
+        if ($response->failed()) {
+            throw new RuntimeException("Nagad complete request failed: {$response->body()}");
+        }
+
+        $responseData = $response->json();
+
+        if (! is_array($responseData)) {
+            throw new RuntimeException('Invalid response received from Nagad Complete API.');
+        }
+
+        return (object) $responseData;
+    }
+
+    /**
+     * 3. Verify payment status using paymentReferenceId.
+     */
+    public function verify(string $paymentReferenceId): object
+    {
+        $url = rtrim(config('nagad.base_url'), '/') . "/verify/payment/{$paymentReferenceId}";
+
+        $response = Http::withHeaders($this->getHeaders())
+            ->acceptJson()
+            ->get($url);
+
+        if ($response->failed()) {
+            throw new RuntimeException("Nagad verify request failed: {$response->body()}");
+        }
+
+        $responseData = $response->json();
+
+        if (! is_array($responseData)) {
+            throw new RuntimeException('Invalid response received from Nagad Verify API.');
+        }
+
+        return (object) $responseData;
+    }
+
+    public function generateChallenge(int $length = 20): string
+    {
+        return bin2hex(random_bytes($length));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Cryptographic & Helper Methods
+    |--------------------------------------------------------------------------
+    */
+
+    protected function encrypt(array $data): string
+    {
+        $jsonData = json_encode($data, JSON_UNESCAPED_SLASHES);
+        $publicKey = openssl_pkey_get_public($this->publicKey);
+
+        if ($publicKey === false) {
+            throw new RuntimeException('Invalid Nagad gateway public key.');
+        }
+
+        $encrypted = null;
+        openssl_public_encrypt($jsonData, $encrypted, $publicKey, OPENSSL_PKCS1_PADDING);
+
+        return base64_encode($encrypted);
+    }
+
+    protected function sign(array $data): string
+    {
+        $jsonData = json_encode($data, JSON_UNESCAPED_SLASHES);
+        $privateKey = openssl_pkey_get_private($this->privateKey);
+
+        if ($privateKey === false) {
+            throw new RuntimeException('Invalid Nagad merchant private key.');
+        }
+
+        $signature = '';
+        openssl_sign($jsonData, $signature, $privateKey, OPENSSL_ALGO_SHA256);
+
+        return base64_encode($signature);
+    }
+
+    protected function decryptRaw(string $encryptedData): string
+    {
+        $decodedData = base64_decode($encryptedData, true);
+        $privateKey = openssl_pkey_get_private($this->privateKey);
+
+        if ($privateKey === false) {
+            throw new RuntimeException('Invalid Nagad merchant private key.');
+        }
+
+        $decrypted = '';
+        openssl_private_decrypt($decodedData, $decrypted, $privateKey, OPENSSL_PKCS1_PADDING);
+
+        return $decrypted;
+    }
+
+    protected function verifySignature(string $plainData, string $signature): bool
+    {
+        $decodedSignature = base64_decode($signature, true);
+        $publicKey = openssl_pkey_get_public($this->publicKey);
+
+        if ($publicKey === false) {
+            throw new RuntimeException('Invalid Nagad gateway public key.');
+        }
+
+        $result = openssl_verify($plainData, $decodedSignature, $publicKey, OPENSSL_ALGO_SHA256);
+
+        return $result === 1;
+    }
+
+    protected function getHeaders(): array
+    {
+        return [
+            'Content-Type'     => 'application/json',
+            'X-KM-Api-Version' => config('nagad.api_version'),
+            'X-KM-Client-Type' => config('nagad.client_type'),
+            'X-KM-IP-V4'       => config('nagad.server_ip'),
+        ];
+    }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- 4. routes/web.php -->
+            <section id="laravel-routes" class="space-y-4 scroll-mt-20">
+                <h2 class="text-lg sm:text-xl font-bold font-heading text-gray-900 dark:text-white">
+                    4. routes/web.php
+                </h2>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-php">&lt;?php
+
+use App\Http\Controllers\AdminController;
+use Illuminate\Support\Facades\Route;
+
+Route::middleware('auth')->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/test-nagad', [AdminController::class, 'nagadPayment'])->name('nagad.payment');
+});
+
+// Nagad Callback Route
+Route::get('/api/nagad/callback', [AdminController::class, 'nagadCallback'])->name('nagad.callback');</code></pre>
+                </div>
+            </section>
+
+            <!-- 5. Controller Implementation -->
+            <section id="laravel-controller" class="space-y-4 scroll-mt-20">
+                <h2 class="text-lg sm:text-xl font-bold font-heading text-gray-900 dark:text-white">
+                    5. AdminController.php Implementation
+                </h2>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-php">&lt;?php
+
+namespace App\Http\Controllers;
+
+use App\Services\NagadService;
+use Illuminate\Http\Request;
+
+class AdminController extends Controller
+{
+    public function __construct(protected NagadService $nagadService) {}
+
+    public function nagadPayment()
+    {
+        // 1. Generate unique dynamic Order ID
+        $orderId = 'ORD' . date('YmdHis') . rand(100, 999);
+        $amount = '100.00';
+
+        // 2. Initialize
+        $initializeData = $this->nagadService->initialize($orderId);
+
+        // 3. Complete
+        $completeResult = $this->nagadService->complete($orderId, $amount, (array) $initializeData->data);
+
+        // 4. Redirect customer to Nagad payment page
+        return redirect()->away($completeResult->callBackUrl);
+    }
+
+    public function nagadCallback(Request $request)
+    {
+        $paymentReferenceId = $request->query('payment_ref_id');
+
+        if (! $paymentReferenceId) {
+            return response()->json(['status' => 'failed', 'message' => 'Missing payment reference ID'], 400);
+        }
+
+        // 5. Always Verify Server-to-Server
+        $result = $this->nagadService->verify($paymentReferenceId);
+
+        if ($result->status === 'Success' && $result->merchantId === config('nagad.merchant_id')) {
+            // Update order status to paid in database
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Payment verified successfully!',
+                'data'    => $result
+            ]);
+        }
+
+        return response()->json(['status' => 'failed', 'message' => 'Payment verification failed.'], 400);
+    }
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Node.js Implementation -->
+            <section id="nodejs-impl" class="space-y-4 scroll-mt-20">
+                <div class="flex items-center gap-2">
+                    <i class="fa-brands fa-node-js text-emerald-500 text-2xl"></i>
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white">
+                        Node.js (Express & Native Crypto)
+                    </h2>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-javascript">const crypto = require('crypto');
+const axios = require('axios');
+const fs = require('fs');
+
+const merchantPrivateKey = fs.readFileSync('./keys/nagad_private_key.pem', 'utf8');
+const nagadGatewayPublicKey = fs.readFileSync('./keys/nagad_public_key.pem', 'utf8');
+
+function encrypt(data) {
+    const buffer = Buffer.from(JSON.stringify(data));
+    const encrypted = crypto.publicEncrypt({
+        key: nagadGatewayPublicKey,
+        padding: crypto.constants.RSA_PKCS1_PADDING
+    }, buffer);
+    return encrypted.toString('base64');
+}
+
+function sign(data) {
+    const signer = crypto.createSign('RSA-SHA256');
+    signer.update(JSON.stringify(data));
+    signer.end();
+    return signer.sign(merchantPrivateKey, 'base64');
+}
+
+function decrypt(encryptedBase64) {
+    const buffer = Buffer.from(encryptedBase64, 'base64');
+    const decrypted = crypto.privateDecrypt({
+        key: merchantPrivateKey,
+        padding: crypto.constants.RSA_PKCS1_PADDING
+    }, buffer);
+    return JSON.parse(decrypted.toString('utf8'));
+}
+
+function verifySignature(plainDataString, signatureBase64) {
+    const verifier = crypto.createVerify('RSA-SHA256');
+    verifier.update(plainDataString);
+    verifier.end();
+    return verifier.verify(nagadGatewayPublicKey, signatureBase64, 'base64');
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Python Implementation -->
+            <section id="python-impl" class="space-y-4 scroll-mt-20">
+                <div class="flex items-center gap-2">
+                    <i class="fa-brands fa-python text-blue-500 text-2xl"></i>
+                    <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white">
+                        Python (FastAPI / Flask)
+                    </h2>
+                </div>
+
+                <div class="code-container">
+                    <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                    <pre><code class="language-python">import base64
+import json
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import padding
+
+with open("keys/nagad_private_key.pem", "rb") as f:
+    private_key = serialization.load_pem_private_key(f.read(), password=None)
+
+with open("keys/nagad_public_key.pem", "rb") as f:
+    public_key = serialization.load_pem_public_key(f.read())
+
+def encrypt(data: dict) -> str:
+    json_bytes = json.dumps(data, separators=(',', ':')).encode('utf-8')
+    encrypted = public_key.encrypt(
+        json_bytes,
+        padding.PKCS1v15()
+    )
+    return base64.b64encode(encrypted).decode('utf-8')
+
+def sign(data: dict) -> str:
+    json_bytes = json.dumps(data, separators=(',', ':')).encode('utf-8')
+    signature = private_key.sign(
+        json_bytes,
+        padding.PKCS1v15(),
+        hashes.SHA256()
+    )
+    return base64.b64encode(signature).decode('utf-8')</code></pre>
+                </div>
+            </section>
+
+            <!-- Bottom Nav Bar -->
+            <div class="pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <a href="api-reference.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs sm:text-sm font-medium transition">
+                    <i class="fa-solid fa-arrow-left text-xs"></i>
+                    <span>API Reference</span>
+                </a>
+                <a href="troubleshooting.html" class="inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl bg-nagad-600 hover:bg-nagad-700 text-white font-medium text-xs sm:text-sm transition shadow-sm">
+                    <span>Next: Troubleshooting & FAQ</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer with Developer Credit -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-900 dark:text-white">Nagad PG Documentation</span>
+                <span>•</span>
+                <span>Developed by <a href="https://shakhawatdev.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-nagad-600 dark:text-red-400 hover:underline">Shakhawat Hossain</a></span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <a href="https://shakhawatdev.com" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-solid fa-globe mr-1"></i> shakhawatdev.com</a>
+                <a href="https://github.com/theshakhawat" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+        function copyCode(button) {
+            const pre = button.nextElementSibling;
+            const code = pre.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1"></i>Copied!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fa-regular fa-copy mr-1"></i>Copy';
+                }, 2000);
+            });
+        }
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        function initTheme() {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        initTheme();
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        });
+
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        });
+
+        // ScrollSpy Active Tab
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveSidebar() {
+            let current = '';
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                const sectionHeight = section.offsetHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('sidebar-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('sidebar-active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSidebar);
+        window.addEventListener('load', updateActiveSidebar);
+    </script>
+</body>
+</html>

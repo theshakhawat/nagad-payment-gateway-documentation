@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nagad Payment Gateway Developer Documentation | Complete Integration Guide</title>
+    <meta name="description" content="A comprehensive, language-agnostic developer documentation for integrating Nagad Online Payment Gateway without third-party dependencies. Authored by Shakhawat Hossain.">
+    <meta name="author" content="Shakhawat Hossain (shakhawatdev.com)">
+    
+    <!-- Google Fonts: Hind Siliguri (Bengali), Inter, Plus Jakarta Sans, Fira Code -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- PrismJS Theme for Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        nagad: {
+                            50: '#fff5f2',
+                            100: '#ffe8e2',
+                            500: '#F7941D',
+                            600: '#E83823',
+                            700: '#D12814',
+                            800: '#A81E0E',
+                            900: '#751408',
+                        },
+                        dark: {
+                            bg: '#0B0F19',
+                            card: '#111827',
+                            border: '#1F2937',
+                            muted: '#9CA3AF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Hind Siliguri', 'Inter', 'system-ui', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'Hind Siliguri', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+        }
+        
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.4); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(156, 163, 175, 0.7); }
+        
+        .sidebar-active {
+            color: #E83823 !important;
+            font-weight: 600;
+            background-color: rgba(232, 56, 35, 0.08);
+            border-left: 3px solid #E83823;
+        }
+        .dark .sidebar-active {
+            background-color: rgba(232, 56, 35, 0.16);
+            color: #ff6b57 !important;
+        }
+        
+        .code-container { 
+            position: relative; 
+            max-width: 100%;
+            overflow: hidden;
+        }
+        
+        pre[class*="language-"] {
+            margin: 0 !important;
+            border-radius: 0.5rem;
+            max-width: 100%;
+            overflow-x: auto !important;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 0.375rem;
+            background: rgba(31, 41, 55, 0.85);
+            color: #d1d5db;
+            border: 1px solid rgba(75, 85, 99, 0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .copy-btn:hover { background: #374151; color: white; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-gray-800 dark:bg-[#0B0F19] dark:text-gray-200 transition-colors duration-200 antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- Top Navbar -->
+    <header class="sticky top-0 z-40 w-full border-b border-gray-200/80 dark:border-gray-800/80 bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none" aria-label="Toggle Mobile Menu">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="index.html" class="flex items-center gap-2 group">
+                    <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" alt="Nagad Official Logo" class="h-8 sm:h-9 w-auto object-contain">
+                    <div class="border-l border-gray-300 dark:border-gray-700 pl-2 sm:pl-2.5">
+                        <span class="font-heading font-extrabold text-sm sm:text-base tracking-tight text-gray-900 dark:text-white">Developer Docs</span>
+                        <span class="hidden sm:inline-block text-[11px] ml-1 px-1.5 py-0.2 rounded-full font-medium bg-red-100 text-red-700 dark:bg-red-950/70 dark:text-red-300 border border-red-200 dark:border-red-900">v3.3 Native</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Global Nav Links & Theme Toggle -->
+            <div class="flex items-center gap-2 sm:gap-4">
+                <nav class="hidden md:flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-300">
+                    <a href="index.html" class="px-3 py-1.5 rounded-lg text-nagad-600 dark:text-red-400 bg-red-50 dark:bg-red-950/40 font-semibold">Overview</a>
+                    <a href="api-reference.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">API Reference</a>
+                    <a href="implementation.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Code Examples</a>
+                    <a href="troubleshooting.html" class="px-3 py-1.5 rounded-lg hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800/60 transition">Troubleshooting</a>
+                </nav>
+
+                <div class="h-5 w-px bg-gray-200 dark:bg-gray-800 hidden md:block"></div>
+
+                <button id="theme-toggle" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition focus:outline-none" title="Toggle Theme">
+                    <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container with items-start for perfect sticky sidebar -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 flex items-start min-w-0">
+        
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden lg:hidden"></div>
+
+        <!-- Sticky Left Sidebar -->
+        <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-30 h-[calc(100vh-4rem)] w-72 lg:w-64 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out p-4 space-y-6">
+            
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Getting Started</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#introduction" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition sidebar-active"><i class="fa-solid fa-book-open text-xs text-nagad-600 w-4"></i> Introduction</a></li>
+                    <li><a href="#mental-model" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-brain text-xs text-gray-400 w-4"></i> Mental Model</a></li>
+                    <li><a href="#payment-lifecycle" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-arrows-spin text-xs text-gray-400 w-4"></i> Payment Lifecycle</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Security & Keys</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="#credentials" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-id-card text-xs text-gray-400 w-4"></i> Credentials List</a></li>
+                    <li><a href="#key-generation-guide" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-download text-xs text-gray-400 w-4"></i> Key Generate & Download</a></li>
+                    <li><a href="#the-three-keys" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-key text-xs text-gray-400 w-4"></i> The Three Keys Role</a></li>
+                    <li><a href="#crypto-deep-dive" class="nav-link flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-lock text-xs text-gray-400 w-4"></i> Encrypt vs. Sign</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2 px-3">Documentation Pages</h3>
+                <ul class="space-y-1 text-sm font-medium">
+                    <li><a href="api-reference.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-network-wired text-xs text-blue-500 w-4"></i> API Reference</a></li>
+                    <li><a href="implementation.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-code text-xs text-emerald-500 w-4"></i> Code Implementations</a></li>
+                    <li><a href="troubleshooting.html" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition"><i class="fa-solid fa-triangle-exclamation text-xs text-amber-500 w-4"></i> Troubleshooting & FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-800/80">
+                <div class="bg-gray-50 dark:bg-gray-900/60 p-3 rounded-xl border border-gray-200 dark:border-gray-800 text-xs">
+                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1.5 mb-1">
+                        <i class="fa-solid fa-code text-nagad-600"></i> Authored by
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 font-medium">Shakhawat Hossain</p>
+                    <a href="https://shakhawatdev.com" target="_blank" class="inline-block mt-2 font-medium text-nagad-600 dark:text-red-400 hover:underline">
+                        Visit Portfolio →
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 min-w-0 py-6 sm:py-8 lg:px-10 space-y-12">
+            
+            <!-- Hero Header -->
+            <section class="space-y-4 border-b border-gray-200 dark:border-gray-800 pb-8">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-900/60">
+                    <i class="fa-solid fa-shield-halved text-nagad-600"></i> Package-Free / Native Language Agnostic
+                </div>
+                <h1 class="text-2xl sm:text-4xl font-extrabold font-heading text-gray-900 dark:text-white tracking-tight leading-snug break-words">
+                    Nagad Online Payment Gateway Integration Guide
+                </h1>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl font-medium">
+                    যেকোনো প্রোগ্রামিং ল্যাঙ্গুয়েজ (PHP, Node.js, Python, Go, Java ইত্যাদি)-এ কোনো থার্ড-পার্টি প্যাকেজ ছাড়াই নগদের সরাসরি REST API, RSA পাবলিক-প্রাইভেট কী এনক্রিপশন এবং SHA256 ডিজিটাল সিগনেচার দিয়ে পেমেন্ট গেটওয়ে ইন্টিগ্রেশন করার সহজ ও প্রফেশনাল হ্যান্ডবুক।
+                </p>
+            </section>
+
+            <!-- 1. Introduction -->
+            <section id="introduction" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">1</span>
+                    Introduction & Background
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
+                    বাংলাদেশ ডিজিটাল ফিনান্সিয়াল সার্ভিস (DFS)-এর অন্যতম জনপ্রিয় গেটওয়ে হলো <strong>নগদ (Nagad)</strong>। সাধারণ থার্ড-পার্টি প্লাগিন ছাড়া কীভাবে নগদের সরাসরি API কল করতে হয় এবং এর পেছনের ক্রিপ্টোগ্রাফিক সিকিউরিটি (RSA Encryption + SHA256withRSA Signature) কীভাবে কাজ করে তা একজন নতুন ডেভেলপারের জন্য বোঝা অত্যন্ত জরুরি।
+                </p>
+                <div class="p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/40 text-blue-900 dark:text-blue-200 text-xs sm:text-sm">
+                    <strong class="font-semibold flex items-center gap-1.5 mb-1"><i class="fa-solid fa-circle-info"></i> এই ডকুমেন্টেশনের বিশেষত্ব:</strong>
+                    আপনি যেকোনো প্রোগ্রামিং ফ্রেমওয়ার্ক ব্যবহার করুন না কেন—কনসেপ্ট, ক্রিপ্টোগ্রাফি, এপিআই কল এবং ডাটা ফ্লো সব জায়গায় একই। এই গাইডটি পড়ার পর আপনি কোনো প্যাকেজ ছাড়াই সম্পূর্ণ নিজের কোডে নগদের পুরো পেমেন্ট লাইফসাইকেল ডেভেলপ করতে পারবেন।
+                </div>
+            </section>
+
+            <!-- 2. Mental Model -->
+            <section id="mental-model" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">2</span>
+                    Payment Gateway Mental Model
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
+                    পেমেন্ট গেটওয়ে কীভাবে কাজ করে? ধরুন একজন কাস্টমার আপনার ওয়েবসাইটে ১,০০০ টাকার একটি প্রডাক্ট কিনবেন। আপনার সার্ভার কখনোই কাস্টমারের নগদ পিন (PIN) বা ওটিপি (OTP) সরাসরি নেয় না।
+                </p>
+                
+                <div class="p-4 sm:p-6 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-4">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400">Core Interaction Flow</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-center text-sm font-medium">
+                        <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <i class="fa-solid fa-globe text-nagad-600 mb-1 text-lg"></i>
+                            <div class="font-semibold text-gray-900 dark:text-white">Your Website</div>
+                            <div class="text-xs text-gray-500">Order Placed</div>
+                        </div>
+                        <div class="flex items-center justify-center text-gray-400">
+                            <i class="fa-solid fa-arrow-right hidden md:inline"></i>
+                            <i class="fa-solid fa-arrow-down md:hidden my-1"></i>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <i class="fa-solid fa-server text-blue-500 mb-1 text-lg"></i>
+                            <div class="font-semibold text-gray-900 dark:text-white">Nagad API</div>
+                            <div class="text-xs text-gray-500">Init & Complete</div>
+                        </div>
+                        <div class="flex items-center justify-center text-gray-400">
+                            <i class="fa-solid fa-arrow-right hidden md:inline"></i>
+                            <i class="fa-solid fa-arrow-down md:hidden my-1"></i>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
+                            <i class="fa-solid fa-credit-card text-emerald-600 mb-1 text-lg"></i>
+                            <div class="font-semibold text-emerald-900 dark:text-emerald-300">Nagad Checkout</div>
+                            <div class="text-xs text-emerald-600 dark:text-emerald-400">PIN / OTP Auth</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Payment Lifecycle -->
+            <section id="payment-lifecycle" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">3</span>
+                    Full Payment Lifecycle (Step-by-Step)
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 text-orange-600 flex items-center justify-center font-bold text-sm">1</div>
+                        <h3 class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">Initialize Phase</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            পেমেন্ট সেশন শুরু করে। নগদ সার্ভার থেকে একটি <code>paymentReferenceId</code> এবং সিকিউরিটি <code>challenge</code> সংগ্রহ করা হয়।
+                        </p>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 flex items-center justify-center font-bold text-sm">2</div>
+                        <h3 class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">Complete / Place Order</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            টাকার পরিমাণ ও কলব্যাক URL পাঠিয়ে নগদ পেমেন্ট পেজের লিংক (<code>callBackUrl</code>) তৈরি করা হয় এবং কাস্টমারকে সেখানে পাঠানো হয়।
+                        </p>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center font-bold text-sm">3</div>
+                        <h3 class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">Callback & Verify</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            কাস্টমার পেমেন্ট সম্পন্ন করার পর সার্ভার-টু-সার্ভার <code>Verify Payment API</code> কল করে ট্রানজ্যাকশন স্ট্যাটাস <code>Success</code> নিশ্চিত করে অর্ডার <code>PAID</code> করা হয়।
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Credentials List -->
+            <section id="credentials" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">4</span>
+                    Integration Credentials
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-xs sm:text-sm">
+                    নগদ মার্চেন্ট পোর্টাল থেকে লাইভ বা স্যান্ডবক্স ইন্টিগ্রেশনের জন্য নিচের ক্রেডেনশিয়ালগুলো সংগ্রহ করতে হবে:
+                </p>
+
+                <div class="overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-800 max-w-full">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-800 text-xs sm:text-sm">
+                        <thead class="bg-gray-50 dark:bg-gray-900/80 font-semibold text-gray-700 dark:text-gray-300">
+                            <tr>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Credential Key</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Description</th>
+                                <th class="px-3 py-2.5 sm:px-4 sm:py-3 text-left">Example Placeholder</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 dark:divide-gray-800 text-gray-600 dark:text-gray-400">
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_BASE_URL</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">নগদ এপিআই-এর মেইন বেস ইউআরএল।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs text-nagad-600 dark:text-red-400">https://api.mynagad.com/api/dfs</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_MERCHANT_ID</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">আপনার জন্য বরাদ্দকৃত ইউনিক মার্চেন্ট আইডি।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">YOUR_MERCHANT_ID</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_ACCOUNT_NUMBER</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">মার্চেন্ট ওয়ালেট বা নগদ অ্যাকাউন্ট নাম্বার।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">017XXXXXXXX</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_CALLBACK_URL</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">পেমেন্ট শেষে কাস্টমার যেখানে রিডাইরেক্ট হবে।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">https://yourdomain.com/api/nagad/callback</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_API_VERSION</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">এপিআই ভার্সন হেডার।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">v-0.2.0</td>
+                            </tr>
+                            <tr>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono font-medium text-gray-900 dark:text-white">NAGAD_CLIENT_TYPE</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3">ক্লায়েন্ট টাইপ হেডার।</td>
+                                <td class="px-3 py-2.5 sm:px-4 sm:py-3 font-mono text-[11px] sm:text-xs">PC_WEB</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 5. Key Generation and Download Guide -->
+            <section id="key-generation-guide" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">5</span>
+                    কী জেনারেশন, ডাউনলোড ও ফাইল ম্যানেজমেন্ট গাইড
+                </h2>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed text-xs sm:text-sm">
+                    কোন কী কিভাবে তৈরি করবেন, কোথায় আপলোড করবেন এবং কোন কী-টি আপনার কোডের কোথায় রাখবেন তা নিচে বিস্তারিত দেখানো হলো:
+                </p>
+
+                <div class="space-y-4">
+                    <!-- Step 1 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-full bg-nagad-600 text-white text-xs flex items-center justify-center font-bold flex-shrink-0">A</span>
+                            <span>১ম ধাপ: আপনার নিজের RSA Key Pair জেনারেট করুন</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">
+                            টার্মিনালে ওপেনএসএসএল (OpenSSL) কমান্ড রান করে আপনার নিজস্ব ২০৪৮-বিট RSA কী-পেয়ার তৈরি করুন:
+                        </p>
+                        <div class="code-container">
+                            <button class="copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy mr-1"></i>Copy</button>
+                            <pre><code class="language-bash"># ১. আপনার Merchant Private Key তৈরি করুন
+openssl genrsa -out nagad_private_key.pem 2048
+
+# ২. প্রাইভেট কী থেকে Merchant Public Key বের করুন
+openssl rsa -in nagad_private_key.pem -pubout -out nagad_merchant_public_key.pem</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs flex items-center justify-center font-bold flex-shrink-0">B</span>
+                            <span>২য় ধাপ: নাগাদ মার্চেন্ট পোর্টালে আপলোড ও নাগাদ পাবলিক কী ডাউনলোড</span>
+                        </div>
+                        <ul class="text-xs text-gray-600 dark:text-gray-400 space-y-2 list-disc list-inside leading-relaxed">
+                            <li>নগদ মার্চেন্ট পোর্টালে লগইন করে <strong>Merchant Integration</strong> মেন্যুতে যান।</li>
+                            <li>আপনার জেনারেট করা <code>nagad_merchant_public_key.pem</code> ফাইলের কনটেন্ট সেখানে আপলোড/পেস্ট করুন।</li>
+                            <li>পোর্টাল থেকে নগদের নিজস্ব <strong>Nagad Gateway Public Key</strong> টি কপি/ডাউনলোড করুন এবং সেভ করুন <code>nagad_public_key.pem</code> নামে।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
+                        <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+                            <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center font-bold flex-shrink-0">C</span>
+                            <span>৩য় ধাপ: আপনার প্রজেক্টের স্টোরেজে ফাইলগুলো রাখুন</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code class="language-text">storage/keys/nagad/
+├── nagad_private_key.pem  # &lt;-- আপনার নিজস্ব Merchant Private Key
+└── nagad_public_key.pem   # &lt;-- পোর্টাল থেকে ডাউনলোড করা Nagad Gateway Public Key</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. The Three Keys -->
+            <section id="the-three-keys" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">6</span>
+                    The 3 Cryptographic Keys (কে কোন কাজে লাগে)
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-red-100 dark:bg-red-950 text-red-600 flex items-center justify-center font-bold text-sm">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <h3 class="font-bold font-heading text-gray-900 dark:text-white text-sm sm:text-base">1. Merchant Private Key</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>আপনার নিজের সিক্রেট কী।</strong><br>
+                            আউটবাউন্ড রিকোয়েস্টে ডিজিটাল সিগনেচার তৈরি করতে এবং নগদ থেকে আসা রেসপন্স ডিক্রিপ্ট করতে ব্যবহৃত হয়।
+                        </p>
+                        <span class="inline-block text-[10px] px-2 py-0.5 rounded bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300 font-semibold uppercase">Keep strictly secret</span>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-950 text-blue-600 flex items-center justify-center font-bold text-sm">
+                            <i class="fa-solid fa-shield"></i>
+                        </div>
+                        <h3 class="font-bold font-heading text-gray-900 dark:text-white text-sm sm:text-base">2. Merchant Public Key</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>আপনার পাবলিক কী।</strong><br>
+                            এটি নগদ পোর্টালে আপলোড করা থাকে। নগদ এই কী দিয়ে আপনার রিকোয়েস্টের সিগনেচার ভ্যালিডেট করে।
+                        </p>
+                        <span class="inline-block text-[10px] px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 font-semibold uppercase">Uploaded to Nagad</span>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm space-y-2">
+                        <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-600 flex items-center justify-center font-bold text-sm">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 class="font-bold font-heading text-gray-900 dark:text-white text-sm sm:text-base">3. Nagad Gateway Public Key</h3>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            <strong>নগদ কর্তৃক প্রদত্ত পাবলিক কী।</strong><br>
+                            নগদ সার্ভারে ডেটা পাঠানোর আগে এনক্রিপ্ট করার জন্য এবং নগদ থেকে আসা রেসপন্সের সিগনেচার ভেরিফাই করার জন্য এটি লাগে।
+                        </p>
+                        <span class="inline-block text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 font-semibold uppercase">Provided by Nagad</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Crypto Deep Dive -->
+            <section id="crypto-deep-dive" class="space-y-4 scroll-mt-20">
+                <h2 class="text-xl sm:text-2xl font-bold font-heading text-gray-900 dark:text-white flex items-center gap-2.5">
+                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-red-100 dark:bg-red-950/70 text-nagad-600 text-sm font-extrabold flex-shrink-0">7</span>
+                    Encryption vs. Digital Signature: স্পষ্ট পার্থক্য
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                    <div class="p-4 sm:p-5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+                        <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-file-shield text-blue-500"></i>
+                            <span>ENCRYPTION (ডেটা গোপন রাখা)</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            সেন্সিটিভ ডেটা যাতে নেটওয়ার্কে কেউ দেখতে না পারে, সেজন্য নগদ গেটওয়ে পাবলিক কী দিয়ে ডেটা লক (Encrypt) করা হয়। একমাত্র নগদ ছাড়া কেউ তা খুলতে পারবে না।
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-2.5 sm:p-3 rounded-lg text-xs font-mono break-all">
+                            Plain JSON → RSA Encrypt (PKCS1 Padding) → Base64 Encode
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 space-y-3">
+                        <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+                            <i class="fa-solid fa-signature text-emerald-500"></i>
+                            <span>SIGNATURE (সত্যতা ও অখণ্ডতা নিশ্চিত করা)</span>
+                        </div>
+                        <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                            রিকোয়েস্টটি আসলেই আপনার সার্ভার থেকেই এসেছে এবং কোনো ডেটা ম্যানিপুলেট করা হয়নি, তা নিশ্চিত করার জন্য আপনার মার্চেন্ট প্রাইভেট কী দিয়ে সিগনেচার তৈরি করা হয়।
+                        </p>
+                        <div class="bg-gray-100 dark:bg-gray-800 p-2.5 sm:p-3 rounded-lg text-xs font-mono break-all">
+                            Plain JSON → SHA256withRSA Sign → Base64 Encode
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Navigation Bar -->
+            <div class="pt-8 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+                <div></div>
+                <a href="api-reference.html" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-nagad-600 hover:bg-nagad-700 text-white font-medium text-sm transition shadow-sm">
+                    <span>Next: API Reference</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer with Developer Credit -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#0B0F19] mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-gray-900 dark:text-white">Nagad PG Documentation</span>
+                <span>•</span>
+                <span>Developed by <a href="https://shakhawatdev.com" target="_blank" rel="noopener noreferrer" class="font-semibold text-nagad-600 dark:text-red-400 hover:underline">Shakhawat Hossain</a></span>
+            </div>
+            <div class="flex items-center gap-4 text-xs">
+                <a href="https://shakhawatdev.com" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-solid fa-globe mr-1"></i> shakhawatdev.com</a>
+                <a href="https://github.com/theshakhawat" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition"><i class="fa-brands fa-github mr-1"></i> GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script>
+        function copyCode(button) {
+            const pre = button.nextElementSibling;
+            const code = pre.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                button.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1"></i>Copied!';
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fa-regular fa-copy mr-1"></i>Copy';
+                }, 2000);
+            });
+        }
+
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        function initTheme() {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+        initTheme();
+
+        themeToggleBtn.addEventListener('click', function() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            backdrop.classList.toggle('hidden');
+        });
+
+        backdrop.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            backdrop.classList.add('hidden');
+        });
+
+        // ScrollSpy Active Tab Feature
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        function updateActiveSidebar() {
+            let current = '';
+            const scrollY = window.pageYOffset;
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                const sectionHeight = section.offsetHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('sidebar-active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('sidebar-active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSidebar);
+        window.addEventListener('load', updateActiveSidebar);
+    </script>
+</body>
+</html>
